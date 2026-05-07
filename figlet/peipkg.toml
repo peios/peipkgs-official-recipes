@@ -13,8 +13,7 @@ files = [
   "usr/bin/figlist",
   "usr/bin/showfigfonts",
   "usr/share/figlet/**",
-  "usr/share/man/man6/figlet.6",
-  "usr/share/man/man6/showfigfonts.6",
+  "usr/share/man/man6/**",
 ]
 
 [upstream]
