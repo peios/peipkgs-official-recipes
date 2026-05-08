@@ -1,0 +1,24 @@
+[meta]
+license = "GPL-3.0-or-later"
+homepage = "https://www.gnu.org/software/hello/"
+build_script = "build.sh"
+
+[[package]]
+name = "hello"
+architecture = "x86_64"
+description = "Friendly GNU Hello which prints a greeting"
+files = [
+  "usr/bin/hello",
+  "usr/share/info/hello.info*",
+  "usr/share/locale/**/hello.mo",
+  "usr/share/man/man1/hello.1*",
+]
+
+[upstream]
+git = "https://git.savannah.gnu.org/git/hello.git"
+tag_pattern = "^v([0-9]+\\.[0-9]+(?:\\.[0-9]+)*)$"
+peios_revision = 1
+submodules = true
+
+[watch]
+poll_interval = "1h"
