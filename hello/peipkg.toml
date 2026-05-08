@@ -19,6 +19,10 @@ git = "https://git.savannah.gnu.org/git/hello.git"
 tag_pattern = "^v([0-9]+\\.[0-9]+(?:\\.[0-9]+)*)$"
 peios_revision = 1
 submodules = true
+# Older releases use earlier autotools macros and gnulib eras whose
+# bootstrap conventions don't match the build script; floor at 2.12
+# (the current major).
+min_version = "2.12"
 
 [watch]
 poll_interval = "1h"
