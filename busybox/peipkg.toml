@@ -1,0 +1,26 @@
+[meta]
+license      = "GPL-2.0-only"
+homepage     = "https://busybox.net/"
+build_script = "build.sh"
+
+[[package]]
+name         = "busybox"
+architecture = "x86_64"
+description  = "The Swiss army knife of embedded Linux — single static binary providing dozens of POSIX utilities"
+# Capture busybox + the applet symlinks at usr/bin/.
+files = [
+  "usr/bin/**",
+]
+
+[upstream]
+git = "https://git.busybox.net/busybox"
+# Busybox tags as 1_31_0, 1_36_1 — separators are underscores, not dots.
+# Named groups let the manager compose a PSD-009-conformant version.
+tag_pattern    = "^(?P<major>[0-9]+)_(?P<minor>[0-9]+)_(?P<patch>[0-9]+)$"
+peios_revision = 1
+# Floor at 1.37.0: that's the current upstream stable. The manager would
+# otherwise queue every historical tag back to 1.0.0 on first poll.
+min_version    = "1.37.0"
+
+[watch]
+poll_interval = "1h"
