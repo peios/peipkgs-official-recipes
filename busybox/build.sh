@@ -17,10 +17,17 @@ set -eu
 
 cd "$SOURCE_DIR"
 
-# Start from busybox's defconfig, then enable static linking.
+# Start from busybox's defconfig, then enable static linking and drop
+# applets that no longer build against modern kernel headers.
 make defconfig
 # CONFIG_STATIC is "# CONFIG_STATIC is not set" in defconfig; flip it on.
 sed -i 's|^# CONFIG_STATIC is not set|CONFIG_STATIC=y|' .config
+# CONFIG_TC references TCA_CBQ_*, TC_CBQ_* and struct tc_cbq_* — all
+# removed when CBQ packet scheduling was dropped from the kernel. Modern
+# Linux UAPI headers no longer ship those symbols, so busybox's tc.c
+# fails to compile. The applet is rarely used (iproute2's `tc` is the
+# standard tool); dropping it is the least-friction fix.
+sed -i 's|^CONFIG_TC=y|# CONFIG_TC is not set|' .config
 # Resolve any new prompts non-interactively. `yes ""` answers default for
 # everything (which is "n" / "leave unchanged" for new symbols).
 yes "" | make oldconfig >/dev/null
