@@ -8,6 +8,7 @@ name         = "kernel"
 architecture = "x86_64"
 description  = "Peios kernel (Linux base + PKM LSM)"
 files = [
+  "usr/lib/x86_64-linux-peios/kernel/vmlinuz",
   "boot/vmlinuz",
 ]
 

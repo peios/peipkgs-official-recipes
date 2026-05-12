@@ -24,4 +24,10 @@ mkdir -p "$HOME"
 # This is the slow step: 10-30 minutes cold, faster with ccache + layer cache.
 make kernel
 
-install -D -m 0644 out/bzImage "$DESTDIR/boot/vmlinuz"
+# PSD-009 §3.4.1: real kernel image lives under /usr/lib/<triplet>/ (arch-
+# specific data); /boot/ holds a symlink so legacy bootloaders that probe
+# /boot/ still find it. Symlink target is relative so it survives DESTDIR
+# rebasing.
+install -D -m 0644 out/bzImage "$DESTDIR/usr/lib/x86_64-linux-peios/kernel/vmlinuz"
+mkdir -p "$DESTDIR/boot"
+ln -sf ../usr/lib/x86_64-linux-peios/kernel/vmlinuz "$DESTDIR/boot/vmlinuz"
