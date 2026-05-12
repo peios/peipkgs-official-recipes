@@ -27,7 +27,13 @@ yes "" | make oldconfig >/dev/null
 
 # Build with musl-gcc. HOSTCC stays as the system gcc because some build-
 # time helpers (e.g. mkdep) are run on the build host.
-make HOSTCC=gcc CC=musl-gcc -j"$(nproc)"
+#
+# `-idirafter /usr/include` lets musl-gcc find Linux UAPI headers
+# (linux/kd.h, linux/loop.h, ...) from the linux-libc-dev package without
+# overriding musl's own libc headers — `-idirafter` adds the path AFTER
+# the standard system include dirs, so musl's <stdio.h> etc. still win.
+# Without this, applets that need kernel UAPI fail to compile.
+make HOSTCC=gcc CC=musl-gcc EXTRA_CFLAGS="-idirafter /usr/include" -j"$(nproc)"
 
 # Stage. busybox is the actual binary; the rest are symlinks.
 install -D -m 0755 busybox "$DESTDIR/usr/bin/busybox"
