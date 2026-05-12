@@ -1,0 +1,23 @@
+[meta]
+license      = "MIT"
+homepage     = "https://github.com/peios/peiosutils"
+build_script = "build.sh"
+
+[[package]]
+name         = "peiosutils"
+architecture = "x86_64"
+description  = "Peios core userspace utilities (whoami-token, show-sd, revstrm, transitional protoinit)"
+files = [
+  "usr/bin/protoinit",
+  "usr/bin/whoami-token",
+  "usr/bin/show-sd",
+  "usr/bin/revstrm",
+]
+
+[upstream]
+git            = "https://github.com/peios/peiosutils.git"
+tag_pattern    = "^v([0-9]+\\.[0-9]+\\.[0-9]+(?:-[a-z]+[0-9]+)?)$"
+peios_revision = 1
+
+[watch]
+poll_interval = "1h"
