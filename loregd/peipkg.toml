@@ -1,0 +1,33 @@
+[meta]
+license      = "MIT"
+homepage     = "https://github.com/peios/loregd"
+build_script = "build.sh"
+
+[[package]]
+name         = "loregd"
+architecture = "x86_64"
+description  = "Local Registry Daemon: RSI source backing LCS hives over /dev/pkm_registry (static, CGO-free, pure-Go sqlite)"
+files = [
+  "usr/bin/loregd",
+]
+
+[upstream]
+git            = "https://github.com/peios/loregd.git"
+# loregd tags releases as v0.21.0 (tracking the PSD-006 spec version it
+# implements). Same stable/pre-release grammar as the kernel recipe:
+#   tag v0.21.0      -> package version 0.21.0-<peios_revision>
+#   tag v0.21.0-rc1  -> package version 0.21.0-rc1-<peios_revision>
+tag_pattern    = "^v([0-9]+\\.[0-9]+\\.[0-9]+(?:-[a-z]+[0-9]+)?)$"
+peios_revision = 1
+
+# loregd is a Peios TCB core component (PSD-004 §6.1 names it alongside
+# peinit/authd/lpsd/eventd): the kernel must recognise its signature to
+# grant it PIP trust, without which it cannot open /dev/pkm_registry. The
+# farm signs the staged binary with the TCB key it holds; the recipe only
+# declares the intent — the grant map in /etc/peipkg-manager/ authorises it.
+[[sign]]
+path = "usr/bin/loregd"
+key  = "tcb"
+
+[watch]
+poll_interval = "1h"
