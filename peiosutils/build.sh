@@ -1,14 +1,18 @@
 #!/bin/sh
-# peiosutils: cargo workspace producing four static-musl-PIE bin tools.
+# peiosutils: the peiosified subset of the uutils coreutils port — 16
+# static-musl binaries, one per command. The rest of the workspace is
+# unported uutils and is NOT built (the stdbuf helper, in particular,
+# needs a cdylib that the static-musl target can't produce).
 #
-# The workspace's .cargo/config.toml defaults the build target to
-# x86_64-unknown-linux-musl with rust-lld + crt-static, so a plain
-# `cargo build --release --workspace` from the workspace root produces
-# the right artifacts.
+# The pu_* crates depend on the published Rust libp stack:
+#   github.com/peios/libp-rs  (tag v0.1.0)  -> the kernel-interface lib
+#   github.com/peios/pkm      (tag uapi/rust/v0.1.0) -> peios-uapi binding
+# (pinned in the crates' Cargo.toml as git deps; cargo fetches them).
 #
-# The peipkg-build sandbox has no HOME. Cargo writes its state to
-# $HOME/.cargo by default; we point CARGO_HOME and CARGO_TARGET_DIR at
-# workdir-local paths so cargo doesn't try '/'.
+# The peipkg-build sandbox has no HOME and is strict-confined: only the
+# work dir (where $SOURCE_DIR lives) is writable. Point cargo's home and
+# target dir at workdir-local paths so it never writes to '/' or a
+# read-only system path.
 set -eu
 
 cd "$SOURCE_DIR"
@@ -17,11 +21,29 @@ export CARGO_HOME="$PWD/.peipkg-cargo-home"
 export CARGO_TARGET_DIR="$PWD/.peipkg-target"
 mkdir -p "$CARGO_HOME" "$CARGO_TARGET_DIR"
 
-cargo build --release --workspace
+# Build only the curated peiosified set, static-musl. The target is passed
+# explicitly (the workspace .cargo/config sets no default build target).
+cargo build --release --target x86_64-unknown-linux-musl \
+    -p pu_cp      --bin cp      \
+    -p pu_logonse --bin logonse \
+    -p pu_ls      --bin ls      \
+    -p pu_mkdir   --bin mkdir   \
+    -p pu_mkfifo  --bin mkfifo  \
+    -p pu_mknod   --bin mknod   \
+    -p pu_mv      --bin mv      \
+    -p pu_nohup   --bin nohup   \
+    -p pu_regman  --bin regman  \
+    -p pu_revstrm --bin revstrm \
+    -p pu_rm      --bin rm      \
+    -p pu_sd      --bin sd      \
+    -p pu_shred   --bin shred   \
+    -p pu_test    --bin test    \
+    -p pu_token   --bin token   \
+    -p pu_touch   --bin touch
 
 REL="$CARGO_TARGET_DIR/x86_64-unknown-linux-musl/release"
 
-install -D -m 0755 "$REL/protoinit"     "$DESTDIR/usr/bin/protoinit"
-install -D -m 0755 "$REL/whoami-token"  "$DESTDIR/usr/bin/whoami-token"
-install -D -m 0755 "$REL/show-sd"       "$DESTDIR/usr/bin/show-sd"
-install -D -m 0755 "$REL/revstrm"       "$DESTDIR/usr/bin/revstrm"
+# PSD-009 §3.4.1: usrmerged, utilities live at /usr/bin/<name>.
+for bin in cp logonse ls mkdir mkfifo mknod mv nohup regman revstrm rm sd shred test token touch; do
+    install -D -m 0755 "$REL/$bin" "$DESTDIR/usr/bin/$bin"
+done
