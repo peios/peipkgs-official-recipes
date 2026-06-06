@@ -1,0 +1,28 @@
+[meta]
+license      = "MIT"
+homepage     = "https://github.com/peios/peipkg"
+build_script = "build.sh"
+
+[[package]]
+name         = "peipkg"
+architecture = "x86_64"
+description  = "Peios client package manager: install, upgrade, and remove .peipkg packages from signed repositories (transactional, resolver-driven)"
+files = [
+  "usr/bin/peipkg",
+]
+
+[upstream]
+git            = "https://github.com/peios/peipkg.git"
+# Same stable/pre-release grammar as the other peios recipes:
+#   tag v0.1.0      -> package version 0.1.0-<peios_revision>
+#   tag v0.1.0-rc1  -> package version 0.1.0-rc1-<peios_revision>
+tag_pattern    = "^v([0-9]+\\.[0-9]+\\.[0-9]+(?:-[a-z]+[0-9]+)?)$"
+peios_revision = 1
+
+# No [[sign]]: peipkg is a model-C tool — it runs as the calling user with
+# no special principal, no setuid, no daemon. KACS enforces every file op
+# against the caller's token, so peipkg holds no authority of its own and
+# is not a TCB component. It needs no PIP trust (unlike loregd).
+
+[watch]
+poll_interval = "1h"
