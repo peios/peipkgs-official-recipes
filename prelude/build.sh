@@ -37,9 +37,10 @@ fi
 
 REL="$CARGO_TARGET_DIR/x86_64-unknown-linux-musl/release"
 
-# prelude is not a normal command; image builders copy it into initramfs as PID 1.
+# prelude is not a normal command. Ship it at the boot payload path peiso/mkirf
+# consume, already named as the initramfs PID 1 entrypoint.
 install -D -m 0755 "$REL/prelude" \
-    "$DESTDIR/usr/lib/x86_64-linux-peios/prelude/prelude"
+    "$DESTDIR/system/boot/prelude/init"
 
 # mkirf and seed-sd are command-line tools.
 install -D -m 0755 "$REL/mkirf" "$DESTDIR/usr/bin/mkirf"
