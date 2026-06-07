@@ -1,0 +1,20 @@
+[meta]
+license      = "MIT"
+homepage     = "https://github.com/peios/peipkgs-official-recipes"
+build_script = "build.sh"
+
+[[package]]
+name         = "live-boot"
+architecture = "noarch"
+description  = "Peios live-boot prelude hook for mounting a squashfs sysroot overlay"
+files = [
+  "system/boot/prelude/hooks/mount-root.sh",
+]
+
+[upstream]
+git            = "https://github.com/peios/peipkgs-official-recipes.git"
+tag_pattern    = "^live-boot-v([0-9]+\\.[0-9]+\\.[0-9]+)$"
+peios_revision = 1
+
+[watch]
+poll_interval = "1h"

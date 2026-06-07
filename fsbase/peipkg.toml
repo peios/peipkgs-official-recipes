@@ -1,0 +1,25 @@
+[meta]
+license      = "MIT"
+homepage     = "https://github.com/peios/peipkgs-official-recipes"
+build_script = "build.sh"
+
+[[package]]
+name         = "fsbase"
+architecture = "noarch"
+description  = "Peios base filesystem shape: runtime mountpoint and state roots"
+files = [
+  "dev/",
+  "proc/",
+  "run/",
+  "sys/",
+  "tmp/",
+  "var/",
+]
+
+[upstream]
+git            = "https://github.com/peios/peipkgs-official-recipes.git"
+tag_pattern    = "^fsbase-v([0-9]+\\.[0-9]+\\.[0-9]+)$"
+peios_revision = 1
+
+[watch]
+poll_interval = "1h"
