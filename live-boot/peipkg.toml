@@ -8,6 +8,7 @@ name         = "live-boot"
 architecture = "noarch"
 description  = "Peios live-boot initramfs hook for mounting a squashfs sysroot overlay"
 files = [
+  "boot/cmdline",
   "boot/initramfs/hooks/mount-root.sh",
 ]
 
