@@ -6,9 +6,9 @@ build_script = "build.sh"
 [[package]]
 name         = "live-boot"
 architecture = "noarch"
-description  = "Peios live-boot prelude hook for mounting a squashfs sysroot overlay"
+description  = "Peios live-boot initramfs hook for mounting a squashfs sysroot overlay"
 files = [
-  "system/boot/prelude/hooks/mount-root.sh",
+  "boot/initramfs/hooks/mount-root.sh",
 ]
 
 [upstream]
