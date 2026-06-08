@@ -14,7 +14,7 @@ files = [
 [upstream]
 git            = "https://github.com/peios/peipkgs-official-recipes.git"
 tag_pattern    = "^live-boot-v([0-9]+\\.[0-9]+\\.[0-9]+)$"
-peios_revision = 1
+peios_revision = 2
 
 [watch]
 poll_interval = "1h"
