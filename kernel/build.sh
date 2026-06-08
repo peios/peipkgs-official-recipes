@@ -31,3 +31,16 @@ make kernel
 install -D -m 0644 out/bzImage "$DESTDIR/usr/lib/x86_64-linux-peios/kernel/vmlinuz"
 mkdir -p "$DESTDIR/boot"
 ln -sf ../usr/lib/x86_64-linux-peios/kernel/vmlinuz "$DESTDIR/boot/vmlinuz"
+
+# regman documentation for the kernel's own registry knobs. The kernel
+# owns these keys (KMES under Machine\System\KMES, LCS under
+# Machine\System\Registry), so it ships their manuals; regman reads the
+# drop-in directory /usr/share/regman/, one provider per file (stem =
+# provider). Ship every fragment under the source tree's regman/ dir, so
+# new knob docs are picked up without touching this recipe.
+for frag in "$SOURCE_DIR"/regman/*.regman; do
+	# Skip the literal pattern if regman/ is absent or empty (e.g. a tag
+	# from before these docs existed); set -e would otherwise fail here.
+	[ -e "$frag" ] || continue
+	install -D -m 0644 "$frag" "$DESTDIR/usr/share/regman/$(basename "$frag")"
+done

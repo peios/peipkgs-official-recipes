@@ -10,6 +10,8 @@ description  = "Peios kernel (Linux base + PKM LSM)"
 files = [
   "usr/lib/x86_64-linux-peios/kernel/vmlinuz",
   "boot/vmlinuz",
+  # regman pages for the kernel's registry knobs (KMES, LCS); see build.sh.
+  "usr/share/regman/*.regman",
 ]
 
 [upstream]
