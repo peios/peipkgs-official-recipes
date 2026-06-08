@@ -1,9 +1,8 @@
 #!/bin/sh
 # prelude: Peios initramfs tooling.
 #
-# Builds three static-musl binaries from the prelude workspace:
+# Builds two static-musl binaries from the prelude workspace:
 #   prelude -- initramfs PID 1
-#   mkirf   -- deterministic initramfs cpio.gz builder
 #   seed-sd -- early-boot/install helper for seeding KACS SDs
 #
 # The package farm sandbox has no HOME and is strict-confined: only the
@@ -33,7 +32,9 @@ fi
 
 # The repo's .cargo/config.toml selects x86_64-unknown-linux-musl and rust-lld.
 # Pass the target explicitly so the build farm log makes the package ABI plain.
-"$CARGO" build --release --target x86_64-unknown-linux-musl
+"$CARGO" build --release --target x86_64-unknown-linux-musl \
+    -p prelude \
+    -p seed-sd
 
 REL="$CARGO_TARGET_DIR/x86_64-unknown-linux-musl/release"
 
@@ -42,6 +43,5 @@ REL="$CARGO_TARGET_DIR/x86_64-unknown-linux-musl/release"
 install -D -m 0755 "$REL/prelude" \
     "$DESTDIR/boot/initramfs/init"
 
-# mkirf and seed-sd are command-line tools.
-install -D -m 0755 "$REL/mkirf" "$DESTDIR/usr/bin/mkirf"
+# seed-sd is a command-line tool.
 install -D -m 0755 "$REL/seed-sd" "$DESTDIR/usr/bin/seed-sd"

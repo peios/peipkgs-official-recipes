@@ -1,6 +1,7 @@
 #!/bin/sh
-# peiosutils: the peiosified subset of the uutils coreutils port — 16
-# static-musl binaries, one per command. The rest of the workspace is
+# peiosutils: the peiosified subset of the uutils coreutils port plus
+# Peios-native utility tools — 17 static-musl binaries, one per command.
+# The rest of the workspace is
 # unported uutils and is NOT built (the stdbuf helper, in particular,
 # needs a cdylib that the static-musl target can't produce).
 #
@@ -28,6 +29,7 @@ cargo build --release --target x86_64-unknown-linux-musl \
     -p pu_logonse --bin logonse \
     -p pu_ls      --bin ls      \
     -p pu_mkdir   --bin mkdir   \
+    -p pu_mkirf   --bin mkirf   \
     -p pu_mkfifo  --bin mkfifo  \
     -p pu_mknod   --bin mknod   \
     -p pu_mv      --bin mv      \
@@ -44,6 +46,6 @@ cargo build --release --target x86_64-unknown-linux-musl \
 REL="$CARGO_TARGET_DIR/x86_64-unknown-linux-musl/release"
 
 # PSD-009 §3.4.1: usrmerged, utilities live at /usr/bin/<name>.
-for bin in cp logonse ls mkdir mkfifo mknod mv nohup regman revstrm rm sd shred test token touch; do
+for bin in cp logonse ls mkdir mkirf mkfifo mknod mv nohup regman revstrm rm sd shred test token touch; do
     install -D -m 0755 "$REL/$bin" "$DESTDIR/usr/bin/$bin"
 done

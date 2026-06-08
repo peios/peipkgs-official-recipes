@@ -6,9 +6,9 @@ build_script = "build.sh"
 [[package]]
 name         = "peiosutils"
 architecture = "x86_64"
-description  = "Peios core userspace utilities — the peiosified (KACS-aware) subset of the uutils coreutils port, one static-musl binary per command"
+description  = "Peios core userspace utilities — peiosified user commands and Peios-native system tools"
 # The curated peiosified set (the pu_* crates). build.sh installs exactly
-# these 16 binaries to usr/bin/<name>; the rest of the uutils workspace is
+# these binaries to usr/bin/<name>; the rest of the uutils workspace is
 # unported and not shipped.
 files = [
   "usr/bin/**",
@@ -17,7 +17,7 @@ files = [
 [upstream]
 git            = "https://github.com/peios/peiosutils.git"
 # Same stable/pre-release grammar as the other recipes:
-#   tag v0.1.0 -> package version 0.1.0-<peios_revision>
+#   tag v0.1.1 -> package version 0.1.1-<peios_revision>
 tag_pattern    = "^v([0-9]+\\.[0-9]+\\.[0-9]+(?:-[a-z]+[0-9]+)?)$"
 peios_revision = 1
 

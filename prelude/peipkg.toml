@@ -6,10 +6,9 @@ build_script = "build.sh"
 [[package]]
 name         = "prelude"
 architecture = "x86_64"
-description  = "Peios initramfs tooling: prelude PID 1, mkirf initramfs builder, and seed-sd KACS SD seeding helper"
+description  = "Peios initramfs runtime: prelude PID 1 and seed-sd KACS SD seeding helper"
 files = [
   "boot/initramfs/init",
-  "usr/bin/mkirf",
   "usr/bin/seed-sd",
 ]
 
@@ -19,11 +18,11 @@ git            = "https://github.com/peios/prelude.git"
 #   tag v0.0.1      -> package version 0.0.1-<peios_revision>
 #   tag v0.0.1-rc1  -> package version 0.0.1-rc1-<peios_revision>
 tag_pattern    = "^v([0-9]+\\.[0-9]+\\.[0-9]+(?:-[a-z]+[0-9]+)?)$"
-peios_revision = 3
+peios_revision = 4
 
 # prelude is initramfs PID 1. seed-sd calls kacs_set_sd to seed MISSING
 # objects during early boot/install flows. Both are Peios TCB binaries and
-# need PIP trust; mkirf is an ordinary builder utility and is not signed.
+# need PIP trust.
 [[sign]]
 path = "boot/initramfs/init"
 key  = "tcb"
